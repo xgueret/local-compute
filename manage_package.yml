@@ -1,0 +1,27 @@
+- name: Check if the key file exists
+  ansible.builtin.stat:
+    path: "/etc/apt/trusted.gpg.d/{{ package.name }}.asc"
+  register: key_exists
+
+- name: Add the key if it does not exist
+  ansible.builtin.apt_key:
+    url: "{{ package.key_url }}"
+    state: present
+  when: not key_exists.stat.exists
+
+- name: Check if the repository is already added
+  ansible.builtin.stat:
+    path: "{{ package.repo_file }}"
+  register: repo_exists
+
+- name: Add the repository if it does not exist
+  ansible.builtin.apt_repository:
+    repo: "{{ package.repo_content }}"
+    state: present
+    filename: "{{ package.name }}"
+  when: not repo_exists.stat.exists
+
+- name: Install the package
+  ansible.builtin.apt:
+    name: "{{ package.name }}"
+    state: present

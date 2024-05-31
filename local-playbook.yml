@@ -1,0 +1,43 @@
+---
+- name: Manage install laptop with ansible
+  hosts: localhost
+  become: true
+  vars:
+    packages:
+      - vim
+      - python3-venv
+      - tree
+      - git
+      - terminator
+      - curl
+
+    spe_packages:
+      - name: "typora"
+        key_url: "https://typora.io/linux/public-key.asc"
+        repo_url: "https://typora.io/linux"
+        repo_file: "/etc/apt/sources.list.d/typora.list"
+        repo_content: "deb https://typora.io/linux ./"
+
+    deb_packages:
+      - src: ./deb_packages/code_1.89.1-1715060508_amd64.deb
+  tasks:
+    - name: Update package list
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install a list of packages
+      ansible.builtin.apt:
+        pkg: "{{ packages }}"
+
+    - name: Install .deb packages
+      ansible.builtin.apt:
+        deb: "{{ item.src }}"
+        state: present
+      loop: "{{ deb_packages }}"
+
+    - name: Manage repositories and keys, then install packages
+      ansible.builtin.include_tasks:
+        file: manage_package.yml
+      loop: "{{ spe_packages }}"
+      loop_control:
+        loop_var: package
