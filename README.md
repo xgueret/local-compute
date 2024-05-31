@@ -69,9 +69,21 @@ pip install ansible ansible-lint
 
 (5) executer le playbook
 
+```∕
+mkdir deb_packages
+```
+
+[vscode download](https://code.visualstudio.com/Download)
+
 ```shell
 ansible-playbook local-playbook.yml --check
 # si ok
 ansible-playbook local-playbook.yml
 ```
+
+
+
+# Annexe
+
+
 
