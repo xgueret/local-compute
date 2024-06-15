@@ -1,0 +1,9 @@
+---
+- name: Manage install laptop with ansible
+  hosts: localhost
+  become: true
+
+  roles:
+    - role: local_laptop
+      tags: 
+        - all

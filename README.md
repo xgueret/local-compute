@@ -1,5 +1,7 @@
 A la première connexion 
 
+
+
 **(1)  se connecter en root** 
 
 ```shell
@@ -22,15 +24,6 @@ sudo visudo
 sudo apt install python3-venv git
 ```
 
-*(i) comment effectuer cette tache via ansible ??*
-
-```shell
-curl -sS https://starship.rs/install.sh | sh
-eval "$(starship init bash)"
-```
-
-(3) 
-
 ```shell
 mkdir Workspace
 cd Workspace
@@ -50,7 +43,7 @@ git clone git@github.com:xgueret/local-compute.git
 > ```
 
 ```shell
-python3 -m venv
+python3 -m venv /path/venv
 ```
 
 ```shell
@@ -65,25 +58,30 @@ source venv/bin/activate
 pip install ansible ansible-lint
 ```
 
-
-
 (5) executer le playbook
 
-```∕
+```shell
 mkdir deb_packages
 ```
-
-[vscode download](https://code.visualstudio.com/Download)
 
 ```shell
 ansible-playbook local-playbook.yml --check
 # si ok
-ansible-playbook local-playbook.yml
+ansible-playbook playbook.yml
 ```
 
+simple mise à jour via le play book
 
+```shell
+ansible-playbook local-playbook.yml --tags update
+```
 
-# Annexe
+liste des tags possible
 
-
-
+- update
+- software
+- install
+- deb
+- vagrant
+- startship
+- common

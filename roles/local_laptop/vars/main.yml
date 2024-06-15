@@ -1,0 +1,53 @@
+---
+packages:
+  - vim
+  - python3-venv
+  - tree
+  - git
+  - terminator
+  - curl
+  - apt-transport-https
+
+libvirt_dependencies_vagrant:
+  - qemu-kvm
+  - libvirt-dev
+  - libvirt-daemon
+  - libvirt-daemon-system
+  - libvirt-clients
+  - bridge-utils
+  - virt-manager
+  - nfs-common 
+  - nfs-kernel-server
+  - vagrant
+
+deb_packages:
+  - name: "vscode"
+    url: "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+    src: "vscode.deb"
+
+software_list:
+  - name: "brave"
+    key_url: "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg"
+    key_path: "/usr/share/keyrings/brave-browser-archive-keyring.gpg"
+    repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+    repo_file: "brave-browser-release"
+    package: "brave-browser"
+  - name: "typora"
+    key_url: "https://typora.io/linux/public-key.asc"
+    key_path: "/etc/apt/trusted.gpg.d/typora-public-key.asc"
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/typora-public-key.asc] https://typora.io/linux ./"
+    repo_file: "typora"
+    package: "typora"
+
+hashicorp:
+  key_url: "https://apt.releases.hashicorp.com/gpg"
+  key_path: "/usr/share/keyrings/hashicorp-archive-keyring.gpg"
+  repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ debian_codename }} main"
+  repo_file: "hashicorp"
+
+alias_list_to_uncomment:
+   - "alias ll='ls -l'"
+   - "alias la='ls -A'"
+   - "alias l='ls -CF'"
+   - "alias grep='grep --color=auto'"
+

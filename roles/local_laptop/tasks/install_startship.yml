@@ -1,0 +1,23 @@
+- name: Get starship install script
+  ansible.builtin.get_url:
+    url: https://starship.rs/install.sh
+    dest: /tmp/starship_install.sh
+    mode: '0755'
+    
+- name: Install starship
+  shell:
+    cmd: /tmp/starship_install.sh --yes
+    executable: /bin/sh      
+
+- name: Clean up Starship install script
+  ansible.builtin.file:
+    path: /tmp/starship_install.sh
+    state: absent
+  
+- name: Ensure the Starship init line is in .bashrc
+  ansible.builtin.lineinfile:
+    path: /home/{{ local_user }}/.bashrc
+    line: 'eval "$(starship init bash)"'
+    create: true
+  become_user: "{{ local_user }}"
+  notify: Apply the changes to .bashrc
