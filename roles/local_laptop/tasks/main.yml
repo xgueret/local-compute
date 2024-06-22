@@ -4,78 +4,40 @@
     that:
       - ansible_facts['os_family'] == "Debian"
     msg: "This role is only supported on Debian systems."
-  tags: 
-    - update
-    - software
-    - install
-    - deb
-    - vagrant  
-    - startship
-    - common
 
 - name: get the username running the deploy
   become: false
   local_action: command whoami
   register: username_on_the_host
-  tags: 
-    - update
-    - software
-    - install
-    - deb
-    - vagrant
-    - startship
-    - common
 
 - name: Set fact username on the host
   ansible.builtin.set_fact:
     local_user: "{{ username_on_the_host.stdout }}"
-  tags: 
-    - update
-    - software
-    - install
-    - deb
-    - vagrant
-    - startship
-    - common
 
 - name: Template contrib.list
   ansible.builtin.template:
     src: contrib.list.j2
     dest: /etc/apt/sources.list.d/contrib.list
     mode: '0644'
-  tags: 
-    - update
-    - software
-    - install
-    - deb
-    - vagrant
-    - startship
 
 - name: Update and upgrade package list
   ansible.builtin.apt:
     upgrade: true
     update_cache: true
-  tags: 
+  tags:
     - update
-    - software
-    - install
-    - deb
-    - vagrant
-    - startship
 
 - name: Install a list of packages
   ansible.builtin.apt:
     pkg: "{{ packages }}"
-  tags: 
-    - software
-    - install
+
+- name: Update file hosts
+  ansible.builtin.include_tasks:
+    file: update_hosts.yml
 
 - name: install package from deb
   ansible.builtin.include_tasks:
     file: install_from_deb.yml
-  tags:
-    - deb
-    - install
 
 - name: Install software
   ansible.builtin.include_tasks:
@@ -83,41 +45,18 @@
   loop: "{{ software_list }}"
   loop_control:
     loop_var: software
-  tags:
-    - software
-    - install
 
 - name: Install vagrant with libvirt
   ansible.builtin.include_tasks:
     file: install_vagrant_with_libvirt.yml
-    apply:     
-      tags:
-        - vagrant
-        - install
-  tags:
-    - vagrant
-    - install
 
 - name: Install starship
   ansible.builtin.include_tasks:
     file: install_startship.yml
-    apply:     
-      tags:
-        - startship
-        - install
-  tags:
-    - startship
-    - install
 
 - name: Modify file .bashrc
   ansible.builtin.include_tasks:
      file: uncomment_alias_bashrc.yml
-     apply:     
-      tags:
-        - common        
   loop: "{{ alias_list_to_uncomment }}"
   loop_control:
-    loop_var: alias
-  tags:
-    - common  
-    
+    loop_var: alias    

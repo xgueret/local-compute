@@ -1,5 +1,6 @@
 ---
 packages:
+  - tree
   - vim
   - python3-venv
   - tree
@@ -7,6 +8,9 @@ packages:
   - terminator
   - curl
   - apt-transport-https
+  - keepass2
+  - xdotool
+  - podman
 
 libvirt_dependencies_vagrant:
   - qemu-kvm

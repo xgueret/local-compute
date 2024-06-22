@@ -79,9 +79,3 @@ ansible-playbook local-playbook.yml --tags update
 liste des tags possible
 
 - update
-- software
-- install
-- deb
-- vagrant
-- startship
-- common

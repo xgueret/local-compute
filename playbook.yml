@@ -5,5 +5,3 @@
 
   roles:
     - role: local_laptop
-      tags: 
-        - all
