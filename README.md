@@ -37,7 +37,7 @@ Run the main playbook to set up your local compute environment:
 
 ```sh
 ansible-playbook playbook.yml
-
+```
 
 ## Contributing
 
