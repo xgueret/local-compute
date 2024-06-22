@@ -1,81 +1,44 @@
-A la première connexion 
+# Local Compute
 
+This repository contains Ansible playbooks for setting up a local compute environment. The playbooks automate the installation and configuration of various tools and packages on your local machine.
 
+## Contents
 
-**(1)  se connecter en root** 
+- `playbook.yml`: Main playbook to execute.
+- `roles/`: Directory containing Ansible roles.
+  - `common/`: Common tasks for setting up the environment.
+  - `git/`: Tasks for installing and configuring Git.
+  - `starship/`: Tasks for installing and configuring Starship prompt.
 
-```shell
-su root
-```
+## Prerequisites
 
-ajouter mon user au groupe sudoers
+- Ansible 2.9 or higher
+- Git
 
-```shell
-sudo visudo
-# ajouter la ligne suivante
-# monuser ALL=(ALL) NOPASSWD:ALL
-```
+## Installation
 
+1. Clone the repository:
 
+    ```sh
+    git clone https://github.com/xgueret/local-compute.git
+    cd local-compute
+    ```
 
-**(2) installer le package python3-venv**
+2. Install Ansible if it is not already installed:
 
-```shell
-sudo apt install python3-venv git
-```
+    ```sh
+    sudo apt update
+    sudo apt install ansible
+    ```
 
-```shell
-mkdir Workspace
-cd Workspace
-```
+## Usage
 
-faire un git clone
+Run the main playbook to set up your local compute environment:
 
-```shell
-git clone git@github.com:xgueret/local-compute.git
-```
-
-> ajouter ma clef publique dans github
->
-> ```shell
->  # gen
->  ssh-keygen -t rsa -b 4096
-> ```
-
-```shell
-python3 -m venv /path/venv
-```
-
-```shell
-source venv/bin/activate
-```
-
-
-
-**(4) Installation de ansible**
-
-```shell
-pip install ansible ansible-lint
-```
-
-(5) executer le playbook
-
-```shell
-mkdir deb_packages
-```
-
-```shell
-ansible-playbook local-playbook.yml --check
-# si ok
+```sh
 ansible-playbook playbook.yml
-```
 
-simple mise à jour via le play book
 
-```shell
-ansible-playbook local-playbook.yml --tags update
-```
+## Contributing
 
-liste des tags possible
-
-- update
+Contributions are welcome! Please fork the repository and submit a pull request.
