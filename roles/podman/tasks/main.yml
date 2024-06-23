@@ -1,0 +1,60 @@
+- name: Ensure apt-transport-https is installed
+  ansible.builtin.apt:
+    name: apt-transport-https
+    state: present
+  
+- name: Check if the key file exists for Podman repository
+  ansible.builtin.stat:
+    path: "{{ podman.key_path }}"
+  register: key_exists
+
+- name: Download GPG key for Podman repository
+  ansible.builtin.get_url:
+    url: "{{ podman.key_url }}"
+    dest: "/tmp/libcontainers-archive-keyring.gpg"
+  when: podman.key_url is defined and not key_exists.stat.exists
+
+- name: Add GPG key for Podman repository
+  ansible.builtin.command: >
+    gpg --dearmor -o {{ podman.key_path }} /tmp/libcontainers-archive-keyring.gpg
+  when: podman.key_url is defined and not key_exists.stat.exists
+
+- name: Add repository for Podman
+  ansible.builtin.apt_repository:
+    repo: "{{ podman.repo }}"
+    filename: "podman"
+    state: present
+
+- name: Update APT package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install Podman
+  ansible.builtin.apt:
+    name: podman
+    state: "{{ podman.version }}"
+
+- name: Install podman-compose
+  ansible.builtin.apt:
+    name: podman-compose
+    state: present
+
+- name: Verify Podman installation
+  ansible.builtin.command: podman --version
+  register: podman_version_result
+  changed_when: false
+
+- name: Verify podman-compose installation
+  ansible.builtin.command: podman-compose --version
+  register: podman_compose_version_result
+  changed_when: false
+
+- name: Debug Podman version
+  ansible.builtin.debug:
+    msg: "Podman version: {{ podman_version_result.stdout }}"
+  when: debug | default(false)
+
+- name: Debug podman-compose version
+  ansible.builtin.debug:
+    msg: "Podman Compose version: {{ podman_compose_version_result.stdout }}"
+  when: debug | default(false)

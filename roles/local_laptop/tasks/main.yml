@@ -62,6 +62,10 @@
   ansible.builtin.include_role:
     name: startship
 
+- name: Install podman
+  ansible.builtin.include_role:
+    name: podman
+
 - name: Modify file .bashrc
   ansible.builtin.include_tasks:
      file: uncomment_alias_bashrc.yml

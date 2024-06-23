@@ -1,0 +1,12 @@
+# Static variables for the Podman role
+
+# debug: true 
+
+podman:
+  version: latest
+  repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main"
+  key_url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_{{ ansible_distribution_version.split('.')[0] }}/Release.key"
+  key_path: "/usr/share/keyrings/libcontainers-archive-keyring.gpg"
+
+podman_compose:
+  version: latest
