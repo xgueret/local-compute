@@ -1,8 +1,12 @@
 ---
+- name: Check if the host is Debian
+  ansible.builtin.set_fact:
+    is_debian: "{{ ansible_facts['os_family'] == 'Debian' }}"
+ 
 - name: Verify if the host is Debian
   ansible.builtin.assert:
     that:
-      - ansible_facts['os_family'] == "Debian"
+      - is_debian
     msg: "This role is only supported on Debian systems."
 
 - name: get the username running the deploy
@@ -47,8 +51,12 @@
     loop_var: software
 
 - name: Install vagrant with libvirt
-  ansible.builtin.include_tasks:
-    file: install_vagrant_with_libvirt.yml
+  ansible.builtin.include_role:
+    name: vagrant_libvirt
+
+- name: Install And Configure Git
+  ansible.builtin.include_role:
+    name: git
 
 - name: Install starship
   ansible.builtin.include_role:

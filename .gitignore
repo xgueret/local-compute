@@ -9,3 +9,4 @@ venv.bak/
 .vscode/
 **/files/*.deb
 **/vars/**/ip_hosts.yml
+**/vars/**/my-git-config-global.yml

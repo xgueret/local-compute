@@ -1,0 +1,46 @@
+- name: Ensure Git is installed
+  ansible.builtin.apt:
+    name: git
+    state: present
+  # become: yes
+
+- name: Check Git version
+  ansible.builtin.command:
+    cmd: git --version
+  register: git_version
+  changed_when: false
+
+- name: Configure Git email address
+  ansible.builtin.command:
+    cmd: git config --global user.email "{{ git_user_email }}"
+  # become: yes
+  when: git_user_email is defined
+
+- name: Configure Git username
+  ansible.builtin.command:
+    cmd: git config --global user.name "{{ git_user_name }}"
+  # become: yes
+  when: git_user_name is defined
+
+# - name: Configure Git editor
+  # ansible.builtin.command:
+    # cmd: git config --global core.editor "{{ git_editor }}"
+  # become: yes
+  # when: git_editor is defined
+
+- name: Configure Git default branch name
+  ansible.builtin.command:
+    cmd: git config --global init.defaultBranch "{{ git_default_branch }}"
+  # become: yes
+  when: git_default_branch is defined
+
+- name: Verify Git configuration
+  ansible.builtin.command:
+    cmd: git config --list
+  register: git_config_list
+  changed_when: false
+
+- name: Debug Git configuration
+  ansible.builtin.debug:
+    msg: "{{ git_config_list.stdout_lines }}"
+  when: debug | default(false)

@@ -4,7 +4,6 @@ packages:
   - vim
   - python3-venv
   - tree
-  - git
   - terminator
   - curl
   - apt-transport-https
@@ -42,12 +41,6 @@ software_list:
     repo: "deb [signed-by=/etc/apt/trusted.gpg.d/typora-public-key.asc] https://typora.io/linux ./"
     repo_file: "typora"
     package: "typora"
-
-hashicorp:
-  key_url: "https://apt.releases.hashicorp.com/gpg"
-  key_path: "/usr/share/keyrings/hashicorp-archive-keyring.gpg"
-  repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ debian_codename }} main"
-  repo_file: "hashicorp"
 
 alias_list_to_uncomment:
    - "alias ll='ls -l'"
