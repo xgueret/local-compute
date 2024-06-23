@@ -10,6 +10,7 @@ This repository contains Ansible playbooks for setting up a local compute enviro
   - `git/`: Tasks for installing and configuring Git.
   - `starship/`: Tasks for installing and configuring Starship prompt.
   - `vagrant_libvirt/`: Tasks for installing and configuring vagrant with libvirt.
+  - `podman/`: Tasks for installing and configuring Podman.
 
 ## Prerequisites
 
