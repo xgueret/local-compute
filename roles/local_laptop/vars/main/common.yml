@@ -9,7 +9,7 @@ packages:
   - apt-transport-https
   - keepass2
   - xdotool
-  - podman
+  - rsync
 
 libvirt_dependencies_vagrant:
   - qemu-kvm

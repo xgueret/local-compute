@@ -19,15 +19,20 @@
     gpg --dearmor -o {{ hashicorp.key_path }} /tmp/hashicorp-archive-keyring.gpg
   when: hashicorp.key_url is defined and not key_exists.stat.exists
   
-- name: Add repository for Vagrant
+- name: Add repository for hashicorp package
   ansible.builtin.apt_repository:
     repo: "{{ hashicorp.repo }}"
-    filename: "vagrant"
+    filename: "hashicorp"
     state: present
 
-- name: Install Vagrant and libvirt dependencies
+- name: Install ashicorp software
   ansible.builtin.apt:
-    pkg: "{{ libvirt_dependencies_vagrant }}"
+    pkg: "{{ software }}"
+    state: present
+
+- name: Install usefull dependencies
+  ansible.builtin.apt:
+    pkg: "{{ dependencies }}"
     state: present
 
 - name: Install the vagrant-libvirt plugin
