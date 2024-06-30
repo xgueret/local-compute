@@ -10,6 +10,11 @@ packages:
   - keepass2
   - xdotool
   - rsync
+  # tools needed to create debian packages
+  - dh-make 
+  - devscripts 
+  - build-essential
+  # --
 
 libvirt_dependencies_vagrant:
   - qemu-kvm
