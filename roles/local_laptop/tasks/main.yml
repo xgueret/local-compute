@@ -38,6 +38,9 @@
 - name: Install package from deb
   ansible.builtin.include_tasks:
     file: install_from_deb.yml
+  loop: "{{ deb_packages }}"
+  loop_control:
+    loop_var: deb_package
 
 - name: Install software
   ansible.builtin.include_tasks:
@@ -58,6 +61,6 @@
   ansible.builtin.include_role:
     name: startship
 
-# - name: Install Docker
-#   ansible.builtin.include_role:
-#     name: docker
+- name: Install Docker
+  ansible.builtin.include_role:
+    name: docker
