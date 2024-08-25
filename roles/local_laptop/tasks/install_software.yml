@@ -1,0 +1,29 @@
+- name: Check if the key file exists for {{ software.name }}
+  ansible.builtin.stat:
+    path: "{{ software.key_path }}"
+  register: key_exists
+
+- name: Add GPG key for {{ software.name }}
+  ansible.builtin.get_url:
+    url: "{{ software.key_url }}"
+    dest: "{{ software.key_path }}"
+    mode: '0644'
+    force: true
+  when: not key_exists.stat.exists
+
+- name: Add repository for {{ software.name }}
+  ansible.builtin.apt_repository:
+    repo: "{{ software.repo }}"
+    filename: "{{ software.repo_file }}"
+    state: present
+  register: repo_added
+
+- name: Update apt cache for {{ software.name }}
+  ansible.builtin.apt:
+    update_cache: true
+  when: repo_added.changed
+
+- name: Install {{ software.package }}
+  ansible.builtin.apt:
+    name: "{{ software.package }}"
+    state: present

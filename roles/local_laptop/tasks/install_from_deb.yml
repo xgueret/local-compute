@@ -1,0 +1,12 @@
+---
+- name: Download deb package
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ role_path }}/files/{{ item.src }}"
+  loop: "{{ deb_packages }}"
+
+- name: Install .deb packages
+  ansible.builtin.apt:
+    deb: "{{ role_path }}/files/{{ item.src }}"
+    state: present
+  loop: "{{ deb_packages }}"

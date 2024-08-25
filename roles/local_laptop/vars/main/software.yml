@@ -1,0 +1,13 @@
+software_list:
+  - name: "brave"
+    key_url: "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg"
+    key_path: "/usr/share/keyrings/brave-browser-archive-keyring.gpg"
+    repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+    repo_file: "brave-browser-release"
+    package: "brave-browser"
+  - name: "typora"
+    key_url: "https://typora.io/linux/public-key.asc"
+    key_path: "/etc/apt/trusted.gpg.d/typora-public-key.asc"
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/typora-public-key.asc] https://typora.io/linux ./"
+    repo_file: "typora"
+    package: "typora"

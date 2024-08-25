@@ -1,0 +1,63 @@
+---
+- name: Check if the host is a Debian or an Ubuntu
+  ansible.builtin.set_fact:
+    is_debian_like: "{{ ansible_facts['os_family'] == 'Debian' }}"
+
+- name: Verify if the host is a Debian or an Ubuntu
+  ansible.builtin.assert:
+    that:
+      - is_debian_like
+    msg: "This role is only supported on Debian familiy systems."
+
+- name: Get the username running the deploy
+  become: false
+  ansible.builtin.command: whoami
+  register: username_on_the_host
+  delegate_to: localhost
+  changed_when: false
+
+- name: Set fact username on the host
+  ansible.builtin.set_fact:
+    local_user: "{{ username_on_the_host.stdout }}"
+
+- name: Update and upgrade package list
+  ansible.builtin.apt:
+    upgrade: true
+    update_cache: true
+  tags:
+    - update
+
+- name: Install a list of packages
+  ansible.builtin.apt:
+    pkg: "{{ packages }}"
+
+- name: Update file hosts
+  ansible.builtin.include_tasks:
+    file: update_hosts.yml
+
+- name: Install package from deb
+  ansible.builtin.include_tasks:
+    file: install_from_deb.yml
+
+- name: Install software
+  ansible.builtin.include_tasks:
+    file: install_software.yml
+  loop: "{{ software_list }}"
+  loop_control:
+    loop_var: software
+
+- name: Install hashicorp_software
+  ansible.builtin.include_role:
+    name: hashicorp_software
+
+- name: Install And Configure Git
+  ansible.builtin.include_role:
+    name: git
+
+- name: Install Starship
+  ansible.builtin.include_role:
+    name: startship
+
+# - name: Install Docker
+#   ansible.builtin.include_role:
+#     name: docker

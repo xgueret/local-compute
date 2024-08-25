@@ -1,0 +1,21 @@
+---
+packages:
+# The essentials
+  - tree
+  - vim
+  - python3-venv
+  - terminator
+  - curl
+  - keepassxc
+  - podman
+  - podman-compose
+  #
+  #- apt-transport-https
+  #- xdotool
+  #- rsync
+  # tools needed to create debian packages
+  #- dh-make 
+  #- devscripts 
+  #- build-essential
+  # --
+
