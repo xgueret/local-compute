@@ -16,6 +16,7 @@
   ansible.builtin.get_url:
     url: "{{ hashicorp_software_gpg.key_url }}"
     dest: "/tmp/hashicorp-archive-keyring.gpg"
+    mode: '0644'
   when: hashicorp_software_gpg.key_url is defined and not key_exists.stat.exists
 
 - name: Add GPG key for HashiCorp
