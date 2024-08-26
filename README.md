@@ -19,29 +19,36 @@ This repository contains Ansible playbooks for setting up a local compute enviro
     Installs Ansible if necessary: Checks if Ansible is installed and installs it if not present.
     Executes Ansible playbook: Runs the playbook.yml file, which defines the tasks to configure the machine.
 
+
+
 ## Prerequisites
 
 - Ansible 2.9 or higher
 - Git
 - ubuntu or debian
 
+
+
 ## Installation
 
 1. Clone the repository:
 
-    ```sh
+    ```shell
     git clone https://github.com/xgueret/local-compute.git
     cd local-compute
     ```
 
+
+
 ## Usage
+
 Before run you need to add the following file
 
-```
+```shell
 ./roles/git/vars/main/my-git-congig-global.yml
 ```
 or modify 
-```
+```shell
 ./roles/git/defaults/main.yml
 ```
 
@@ -69,7 +76,36 @@ chmod +x local_laptop.sh
 
 
 
-## Contributing
+## :facepunch: Contribution
 
-:facepunch: Contributions are welcome! Please fork the repository and submit a pull request.
+Contributions are welcome! If you'd like to contribute, please follow these steps:
 
+1. **Fork the repository** to your own GitHub account.
+2. **Clone your fork** locally:
+
+```shell
+git clone https://github.com/yourusername/local-compute.git
+cd manage-repo
+```
+
+**Create a new branch** for your feature or bug fix:
+
+```shell
+git checkout -b my-new-feature
+```
+
+**Make your changes** and commit them with a clear message:
+
+```shell
+git commit -m "Add new feature"
+```
+
+**Push your branch** to your fork:
+
+1. ```shell
+   git push origin my-new-feature
+   ```
+
+2. **Open a Pull Request** on the original repository and describe your changes.
+
+By following these steps, you can help improve the project for everyone!
