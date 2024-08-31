@@ -6,6 +6,7 @@ packages:
   - python3-venv
   - terminator
   - curl
+  - httpie
   - keepassxc
   - podman
   - podman-compose
