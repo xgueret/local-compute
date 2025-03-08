@@ -42,7 +42,7 @@
     repo: "{{ docker_gpg.repo }}"
     filename: "docker"
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Install Docker Engine
   ansible.builtin.apt:
@@ -55,4 +55,4 @@
   ansible.builtin.systemd:
     name: docker
     state: started
-    enabled: yes
+    enabled: true

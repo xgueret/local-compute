@@ -1,11 +1,13 @@
-# This file is managed by Ansible. Do not edit manually.
-# Managed by Ansible - {{ ansible_date_time.iso8601 }}
+# /etc/hosts file managed by Ansible
 
 127.0.0.1	 localhost
-{{ ansible_fqdn }} {{ ansible_hostname }}
+
+# ansible_fqdn ansible_hostname
 
 # Custom host entries
-# TODO
+{% for host in custom_hosts %}
+{{ host.ip }}   {{ host.name }}
+{% endfor %}
 
 # The following lines are desirable for IPv6 capable hosts
 ::1     localhost ip6-localhost ip6-loopback

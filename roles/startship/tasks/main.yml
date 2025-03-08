@@ -1,3 +1,4 @@
+---
 - name: Get username on the host
   ansible.builtin.command: whoami
   register: username_on_the_host

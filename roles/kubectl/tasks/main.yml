@@ -1,0 +1,30 @@
+- name: Check if the key file exists for Kubernetes
+  ansible.builtin.stat:
+    path: "{{ kubernetes_gpg.path }}"
+  register: key_exists
+
+- name: Download Kubernetes official GPG key
+  ansible.builtin.get_url:
+    url: "{{ kubernetes_gpg.url }}"
+    dest: "{{ kubernetes_gpg.tmp_path }}"
+    mode: '0644'
+  when: kubernetes_gpg.url is defined and not key_exists.stat.exists
+
+- name: Add GPG key for Kubernetes
+  ansible.builtin.command: >
+    gpg --dearmor -o {{ kubernetes_gpg.path }} {{ kubernetes_gpg.tmp_path }}
+  when: kubernetes_gpg.url is defined and not key_exists.stat.exists
+
+- name: Set up the Kubernetes repository
+  ansible.builtin.apt_repository:
+    repo: "{{ kubernetes_gpg.repo }}"
+    filename: "kubernetes"
+    state: present
+    update_cache: true
+
+- name: Install kubectl
+  ansible.builtin.apt:
+    name:
+      - kubectl
+    state: present
+    update_cache: true

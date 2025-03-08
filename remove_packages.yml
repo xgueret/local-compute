@@ -1,0 +1,20 @@
+- name: Remove specified packages
+  hosts: localhost
+  become: true
+  vars:
+    packages:
+      - jq
+
+  tasks:
+    - name: Check if the packages list us provided
+      ansible.builtin.assert:
+        that: packages is defined and packages | length > 0
+        fail_msg: "The 'packages' variable must be defined and contain at least one package to remove."
+
+    - name: Remove a list of packages
+      ansible.builtin.apt:
+        pkg: "{{ packages }}"
+        state: absent
+      when: packages | length > 0
+      tags:
+        - remove_packages

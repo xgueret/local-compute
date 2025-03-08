@@ -1,0 +1,58 @@
+---
+- name: Remove asdf setup
+  hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Get the username running the playbook
+      become: false
+      ansible.builtin.command: whoami
+      register: username_on_the_host
+      delegate_to: localhost
+      changed_when: false
+      tags:
+        - asdf
+        - setup
+
+    - name: Set fact username on the host
+      ansible.builtin.set_fact:
+        local_user: "{{ username_on_the_host.stdout }}"
+      tags:
+        - asdf
+        - setup
+
+    - name: Remove the asdf directory
+      ansible.builtin.file:
+        path: "/home/{{ local_user }}/.asdf"
+        state: absent
+
+    - name: Remove asdf.sh entries from bashrc
+      ansible.builtin.lineinfile:
+        path: "/home/{{ local_user }}/.bashrc"
+        regexp: '^\. /home/{{ local_user }}/\.asdf/asdf.sh'
+        state: absent
+        owner: "{{ local_user }}"
+        group: "{{ local_user }}"
+        mode: '0644'
+      tags:
+        - asdf
+        - cleanup
+
+    - name: Remove completions/asdf.bash entries from bashrc
+      ansible.builtin.lineinfile:
+        path: "/home/{{ local_user }}/.bashrc"
+        regexp: '^\. /home/{{ local_user }}/\.asdf/completions/asdf.bash'
+        state: absent
+        owner: "{{ local_user }}"
+        group: "{{ local_user }}"
+        mode: '0644'
+      tags:
+        - asdf
+        - cleanup
+
+    - name: Display message to reload bashrc
+      ansible.builtin.debug:
+        msg: "asdf has been removed. Please run 'source /home/{{ local_user }}/.bashrc' or restart your terminal to apply changes."
+      tags:
+        - asdf
+        - notify

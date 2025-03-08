@@ -10,6 +10,21 @@ packages:
   - keepassxc
   - podman
   - podman-compose
+  - net-tools
+  - htop
+  - iftop
+  - bash-completion
+  - xclip
+  - jq
+  - yq
+# developpement
+  - sqlite3
+  - shellcheck
+## img
+  - gimp
+## js
+  # - nodejs
+  # - npm
   #
   #- apt-transport-https
   #- xdotool
@@ -19,4 +34,7 @@ packages:
   #- devscripts 
   #- build-essential
   # --
-
+# misc
+  - python3-argcomplete
+# k8s
+  - kubetail

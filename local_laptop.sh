@@ -1,17 +1,30 @@
 #!/bin/bash
 
-# set -x
+# Activer le mode strict pour bash
+set -euo pipefail
+IFS=$'\n\t'
 
-# Determine the directory where the script is located
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+# Déterminer le répertoire du script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Chemin vers l'environnement virtuel
+VENV_PATH="$SCRIPT_DIR/.venv"
+# Liste des tags valides
+readonly VALID_TAGS=("update" "install" "configure")
+# Version minimum de Python requise
+readonly MIN_PYTHON_VERSION="3.8"
 
-# Path to the virtual environment
-VENV_PATH="$SCRIPT_DIR/venv"
+# Fonction pour vérifier la version de Python
+check_python_version() {
+    local python_version
+    python_version=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+    
+    if ! awk -v ver="$python_version" -v min="$MIN_PYTHON_VERSION" 'BEGIN {exit (ver >= min)}'; then
+        echo "Erreur: Python $MIN_PYTHON_VERSION ou supérieur est requis (version actuelle: $python_version)" >&2
+        exit 1
+    fi
+}
 
-# List of valid tags
-VALID_TAGS=("update")
-
-# Function to check if a tag is valid
+# Fonction pour vérifier si un tag est valide
 is_valid_tag() {
     local tag=$1
     for valid_tag in "${VALID_TAGS[@]}"; do
@@ -22,65 +35,117 @@ is_valid_tag() {
     return 1
 }
 
-# Function to display help
+# Fonction pour afficher l'aide
 show_help() {
-    echo "Usage: $0 [options] [tag]"
-    echo
-    echo "Description:"
-    echo "  This script sets up a Python virtual environment, installs Ansible if it's not already installed,"
-    echo "  and runs an Ansible playbook with optional tags."
-    echo
-    echo "Options:"
-    echo "  --help         Show this help message and exit"
-    echo
-    echo "Arguments:"
-    echo "  tag            The tag to filter the playbook execution (valid tags are: ${VALID_TAGS[*]})"
-    echo
-    echo "Examples:"
-    echo "  $0 update      Run the playbook with the 'update' tag"
-    echo "  $0             Run the playbook without any tags"
-    echo
-    echo "Note:"
-    echo "  Take time to fully understand what this script does before running it ;-)"
+    cat << EOF
+Usage: $(basename "$0") [options] [tag]
 
+Description:
+    Ce script configure un environnement virtuel Python, installe Ansible
+    si nécessaire, et exécute un playbook Ansible avec des tags optionnels.
+
+Options:
+    -h, --help    Affiche ce message d'aide
+    -v, --version Affiche la version du script
+    -d, --debug   Active le mode debug
+
+Arguments:
+    tag           Tag pour filtrer l'exécution du playbook (tags valides: ${VALID_TAGS[*]})
+
+Exemples:
+    $(basename "$0") update     # Exécute le playbook avec le tag 'update'
+    $(basename "$0")           # Exécute le playbook sans tags
+
+Note:
+    Assurez-vous de bien comprendre ce que fait ce script avant de l'exécuter ;-)
+EOF
 }
 
-# Create the virtual environment if it doesn't exist
+# Fonction pour nettoyer à la sortie
+cleanup() {
+    if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+        deactivate 2>/dev/null || true
+    fi
+}
+
+# Fonction pour gérer les erreurs
+handle_error() {
+    local line=$1
+    local command=$2
+    echo "Erreur à la ligne $line lors de l'exécution de: $command" >&2
+    cleanup
+    exit 1
+}
+
+# Configuration du gestionnaire d'erreurs
+trap 'handle_error ${LINENO} "$BASH_COMMAND"' ERR
+trap cleanup EXIT
+
+# Parsing des arguments
+DEBUG=0
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -v|--version)
+            echo "Version 1.0.0"
+            exit 0
+            ;;
+        -d|--debug)
+            DEBUG=1
+            shift
+            ;;
+        *)
+            TAG=$1
+            shift
+            ;;
+    esac
+done
+
+# Activer le mode debug si demandé
+[[ $DEBUG -eq 1 ]] && set -x
+
+# Vérifier la version de Python
+check_python_version
+
+# Créer l'environnement virtuel s'il n'existe pas
 if [ ! -d "$VENV_PATH" ]; then
-    echo "Creation Python virtual environment..."
+    echo "Création de l'environnement virtuel Python..."
     python3 -m venv "$VENV_PATH"
 fi
 
-# Activate the virtual environment
+# Activer l'environnement virtuel
+# shellcheck source=/dev/null
 source "$VENV_PATH/bin/activate"
 
+# Mettre à jour pip
+python3 -m pip install --upgrade pip
 
-#Check if Ansible is installed, install if not
+# Vérifier si Ansible est installé, l'installer si nécessaire
 if ! command -v ansible-playbook &> /dev/null; then
-    echo "Ansible not found, installing..."
-    pip install ansible
+    echo "Ansible non trouvé, installation en cours..."
+    python3 -m pip install ansible
 fi
 
-# Handle help option
-if [[ "$1" == "--help" ]]; then
-    show_help
-    exit 0
+# Vérifier l'existence du playbook
+PLAYBOOK="$SCRIPT_DIR/playbook.yml"
+if [ ! -f "$PLAYBOOK" ]; then
+    echo "Erreur: Le fichier playbook.yml n'existe pas dans $SCRIPT_DIR" >&2
+    exit 1
 fi
 
-# Check if tags are passed as an argument
-if [ -n "$1" ]; then 
-    TAG=$1
-    if is_valid_tag "$TAG"; then                
-        echo "Running playbook with tags: $TAG"
-        ansible-playbook $SCRIPT_DIR/playbook.yml --tags "$TAG"
+# Exécuter le playbook avec ou sans tags
+if [ -n "${TAG:-}" ]; then
+    if is_valid_tag "$TAG"; then
+        echo "Exécution du playbook avec le tag: $TAG"
+        ansible-playbook "$PLAYBOOK" --tags "$TAG"
     else
-        echo "Error: Invalid tag '$TAG', Valid tags are: ${VALID_TAG[*]}"
+        echo "Erreur: Tag invalide '$TAG'. Tags valides: ${VALID_TAGS[*]}" >&2
         exit 1
     fi
 else
-    echo "Running playbook without tags"
-    ansible-playbook $SCRIPT_DIR/playbook.yml
+    echo "Exécution du playbook sans tags"
+    ansible-playbook "$PLAYBOOK"
 fi
-
-# Deactivate the virtual environment
-deactivate
