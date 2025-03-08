@@ -1,10 +1,8 @@
 # Automated Laptop Setup and Configuration with Ansible
 
-
-
 ![](/home/xgueret/Workspace/local-compute/img/local_laptop.png)
 
-## Description
+## Description ![Stars](https://img.shields.io/github/stars/xgueret/local-compute?style=social) ![Last Commit](https://img.shields.io/github/last-commit/xgueret/local-compute) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
 This project uses Ansible to automate the installation and configuration of a laptop running Debian or Ubuntu. It includes essential software installation, system configuration, and the management of development and containerization tools.
 
@@ -131,7 +129,7 @@ pre-commit install
 
 ## 👥 Contributors
 
-- **Author**: Xavier GUERET
+- **Author**: Xavier GUERET [![GitHub followers](https://img.shields.io/github/followers/xgueret?style=social)](https://github.com/tonykipkemboi) [![Twitter Follow](https://img.shields.io/twitter/follow/xgueret?style=social)](https://x.com/hixmaster) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/xavier-gueret-47bb3019b/)
 
 
 
