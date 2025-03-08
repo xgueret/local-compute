@@ -1,0 +1,8 @@
+---
+asdf_plugins:
+  # - name: "jq"
+  #   url: "https://github.com/lsanwick/asdf-jq.git"
+  #   version: "1.7.1"
+  - name: "k9s"
+    url: "https://github.com/looztra/asdf-k9s.git"
+    version: "0.32.7"

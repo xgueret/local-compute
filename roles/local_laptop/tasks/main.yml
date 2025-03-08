@@ -9,6 +9,11 @@
       - is_debian_like
     msg: "This role is only supported on Debian familiy systems."
 
+- name: Set the system hostname
+  ansible.builtin.hostname:
+    name: "{{ desired_hostname }}"
+  when: ansible_facts['hostname'] != desired_hostname
+
 - name: Get the username running the deploy
   become: false
   ansible.builtin.command: whoami
@@ -64,3 +69,19 @@
 - name: Install Docker
   ansible.builtin.include_role:
     name: docker
+
+# - name: Install Homebrew
+#   ansible.builtin.include_role:
+#     name: homebrew
+
+- name: Install asdf
+  ansible.builtin.include_role:
+    name: asdf
+
+- name: Install kubectl
+  ansible.builtin.include_role:
+    name: kubectl
+#todo il faudra regrouper l'installation des outils de dev dans ce rôle
+- name: Install devtools
+  ansible.builtin.include_role:
+    name: devtools

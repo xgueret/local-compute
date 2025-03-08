@@ -1,0 +1,34 @@
+---
+- name: Get username on the host
+  ansible.builtin.command: whoami
+  register: username_on_the_host
+
+- name: Set fact local_user on the host if not defined
+  ansible.builtin.set_fact:
+    local_user: "{{ username_on_the_host.stdout }}"
+  when: local_user is not defined
+
+- name: Check if Homebrew is already installed
+  ansible.builtin.command:
+    cmd: /home/linuxbrew/.linuxbrew/bin/brew --version
+  register: brew_version
+  ignore_errors: false
+
+- name: Install Homebrew if not present
+  ansible.builtin.shell:
+    cmd: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: brew_version.rc != 0
+  become: false
+
+- name: Ensure Homebrew is added to user bash profile
+  ansible.builtin.lineinfile:
+    path: /home/{{ local_user }}/.bash_profile
+    line: 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+    create: true
+  when: brew_version.rc != 0
+
+- name: Apply Homebrew shell environment to current session
+  ansible.builtin.shell:
+    cmd: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  when: brew_version.rc != 0
+  ignore_errors: true

@@ -1,0 +1,47 @@
+---
+# revert_kubernetes_setup.yml
+- name: Revert Kubernetes setup actions
+  hosts: localhost
+  become: yes
+  vars:
+    kubernetes_gpg:
+      path: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+      tmp_path: "/tmp/kubernetes-apt-keyring.gpg"
+      url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+      repo: "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
+
+  tasks:
+    - name: Check if Kubernetes GPG key file exists
+      ansible.builtin.stat:
+        path: "{{ kubernetes_gpg.path }}"
+      register: key_exists
+
+    - name: Remove Kubernetes GPG key file
+      ansible.builtin.file:
+        path: "{{ kubernetes_gpg.path }}"
+        state: absent
+      when: key_exists.stat.exists
+      tags:
+        - gpg_cleanup
+
+    - name: Remove temporary Kubernetes GPG key file if it exists
+      ansible.builtin.file:
+        path: "{{ kubernetes_gpg.tmp_path }}"
+        state: absent
+      tags:
+        - gpg_cleanup
+
+    - name: Remove Kubernetes repository from APT sources
+      ansible.builtin.apt_repository:
+        repo: "{{ kubernetes_gpg.repo }}"
+        filename: "kubernetes"
+        state: absent
+      tags:
+        - repo_cleanup
+
+    - name: Uninstall kubectl
+      ansible.builtin.apt:
+        name: kubectl
+        state: absent
+      tags:
+        - package_cleanup

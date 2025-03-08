@@ -1,111 +1,144 @@
-# Local Compute
+# Automated Laptop Setup and Configuration with Ansible
 
-This repository contains Ansible playbooks for setting up a local compute environment. The playbooks automate the installation and configuration of various tools and packages on your local machine.
+![](img/local_laptop.png)
 
+## Description ![Stars](https://img.shields.io/github/stars/xgueret/local-compute?style=social) ![Last Commit](https://img.shields.io/github/last-commit/xgueret/local-compute) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
+This project uses Ansible to automate the installation and configuration of a laptop running Debian or Ubuntu. It includes essential software installation, system configuration, and the management of development and containerization tools.
 
-## Contents
+## Project Structure
 
-- `playbook.yml`: Main playbook to execute.
-- `roles/`: Directory containing Ansible roles.
-  - `git/`: Tasks for installing and configuring Git.
-  - `starship/`: Tasks for installing and configuring Starship prompt.
-  - `hashicorp_software/`: Tasks for installing and configuring hashicorp software (vagrant, terraform).
-  - `podman/`: Tasks for installing and configuring Podman.
-  - `docker/`: Tasks for installing and configuring Docker.
-- `local_laptop.sh` The local_laptop.sh script plays a crucial role in setting up the local-compute package (soon), which is intended for Debian-based distributions. 
-    It automates the installation and configuration process using Ansible. Key functionalities include:
-    Creates a Python virtual environment: Ensures dependencies are isolated and managed locally.
-    Installs Ansible if necessary: Checks if Ansible is installed and installs it if not present.
-    Executes Ansible playbook: Runs the playbook.yml file, which defines the tasks to configure the machine.
+- `ansible.cfg`: Global Ansible configuration
+- `inventory.yml`: Defines hosts and groups for Ansible
+- `playbook.yml`: Main playbook orchestrating the role execution
+- `roles/`: Contains various Ansible roles
+  - `local_laptop/`: Laptop installation and configuration
+  - `docker/`: Docker and Docker Compose installation
+  - `git/`: Git configuration
+  - `kubectl/`: `kubectl` installation
+  - `devtools/`: Development tools installation (e.g., Postman)
+  - `asdf/`: `asdf` version manager setup
+  - `hashicorp_software/`: Terraform and Vagrant installation
+  - `startship/`: Starship installation
 
-
-
-## Prerequisites
-
-- Ansible 2.9 or higher
-- Git
-- ubuntu or debian
-
-
-
-## Installation
-
-1. Clone the repository:
-
-    ```shell
-    git clone https://github.com/xgueret/local-compute.git
-    cd local-compute
-    ```
-
-
-
-## Usage
-
-Before run you need to add the following file
-
-```shell
-./roles/git/vars/main/my-git-congig-global.yml
 ```
-or modify 
-```shell
-./roles/git/defaults/main.yml
+.
+├── ansible.cfg
+├── check_ansible_vault.sh
+├── group_vars
+│   └── all
+├── img
+│   └── local_laptop.png
+├── local_laptop.sh
+├── playbook.yml
+├── pyvenv.cfg
+├── README.md
+├── remove_asdf_setup.yml
+├── remove_packages.yml
+├── requirement.txt
+├── revert_kubernetes_setup.yml
+├── roles
+│   ├── asdf
+│   ├── devtools
+│   ├── docker
+│   ├── git
+│   ├── hashicorp_software
+│   ├── homebrew
+│   ├── kubectl
+│   ├── local_laptop
+│   └── startship
+├── terraform
+│   ├── main.tf
+│   ├── terraform.tfstate
+│   └── variables.tf
+└── venv
+
 ```
 
 
 
-### Set up your local compute environment:
+## 📚 Prerequisites
 
-**:warning: <u>Take time to fully understand what this script does before running it</u>**
+- Debian-based system (Debian 12, Ubuntu...)
+- Python 3.8 or higher
+- Ansible installed on the local machine
+
+
+
+## 🚀 Installation
+
+### 1. Clone the Repository
 
 ```sh
-chmod +x local_laptop.sh
-./local_laptop.sh --help
+git clone <REPO_URL>
+cd <REPO_NAME>
+```
+
+### 2. Install Dependencies
+
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirement.txt
+```
+
+### 3. Configure Ansible Vault
+
+If files are encrypted with `ansible-vault`, ensure you have the password file:
+
+```sh
+export ANSIBLE_VAULT_PASSWORD_FILE=~/Workspace/.vault/.vault_password
+```
+
+### 4. Run the Playbook
+
+```sh
+ansible-playbook playbook.yml
+```
+
+Or with a specific tag:
+
+```sh
+ansible-playbook playbook.yml --tags install
 ```
 
 
 
-## Note
+## 🏷️Available Tags
 
-:thinking: **Podman** and **Docker** can coexist on the same machine without any issues. 
+- `install`: Base installation
+- `update`: Package updates
+- `configure`: System configuration
+- `remove_packages`: Uninstall specific software
+- `asdf`: Manage plugins with `asdf`
+- `kubernetes`: Setup `kubectl`
+- `docker`: Install and configure Docker
 
-1. **Complete Isolation**: Podman and Docker operate independently. Podman is designed to be daemonless, whereas Docker relies on a central daemon to manage containers. This fundamental difference allows Podman and Docker to coexist without directly interfering with each other.
-2. **Separate File Locations**: The configuration files and data directories for Podman and Docker are distinct. Podman stores its configurations and images in different locations than Docker, avoiding file conflicts.
-3. **Similar Commands**: While Podman commands are very similar to Docker’s (often interchangeable), the two tools do not share the same container sessions or networks, reducing the risk of conflicts.
-4. **Resource Management**: As with any resource-intensive applications, you'll need to be mindful of resource usage (CPU, memory, storage) if you’re running many containers with both tools simultaneously.
 
 
+## 🕵️‍♀️Security
 
-## :facepunch: Contribution
+The project uses `pre-commit` to ensure files containing secrets are properly encrypted with `ansible-vault`.
 
-Contributions are welcome! If you'd like to contribute, please follow these steps:
-
-1. **Fork the repository** to your own GitHub account.
-2. **Clone your fork** locally:
-
-```shell
-git clone https://github.com/yourusername/local-compute.git
-cd manage-repo
+```
+pre-commit install
 ```
 
-**Create a new branch** for your feature or bug fix:
 
-```shell
-git checkout -b my-new-feature
-```
 
-**Make your changes** and commit them with a clear message:
+## 👥 Contributors
 
-```shell
-git commit -m "Add new feature"
-```
+- **Author**: Xavier GUERET [![GitHub followers](https://img.shields.io/github/followers/xgueret?style=social)](https://github.com/tonykipkemboi) [![Twitter Follow](https://img.shields.io/twitter/follow/xgueret?style=social)](https://x.com/hixmaster) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/xavier-gueret-47bb3019b/)
 
-**Push your branch** to your fork:
 
-1. ```shell
-   git push origin my-new-feature
-   ```
 
-2. **Open a Pull Request** on the original repository and describe your changes.
+## 👥 Contributing
 
-By following these steps, you can help improve the project for everyone!
+Contributions are welcome! Please feel free to submit a [Pull Request](https://github.com/xgueret/local-compute/pulls).
+
+
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/xgueret/local-compute/blob/main/LICENSE) file for details.

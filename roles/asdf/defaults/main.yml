@@ -1,0 +1,5 @@
+---
+# Version of asdf https://github.com/asdf-vm/asdf/tags
+asdf_version: "v0.14.1"
+# Git repository URL for asdf
+asdf_git_url: "https://github.com/asdf-vm/asdf.git"
