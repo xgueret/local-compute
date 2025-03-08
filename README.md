@@ -1,6 +1,6 @@
 # Automated Laptop Setup and Configuration with Ansible
 
-![](/home/xgueret/Workspace/local-compute/img/local_laptop.png)
+![](img/local_laptop.png)
 
 ## Description ![Stars](https://img.shields.io/github/stars/xgueret/local-compute?style=social) ![Last Commit](https://img.shields.io/github/last-commit/xgueret/local-compute) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
