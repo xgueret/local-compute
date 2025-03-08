@@ -1,8 +1,12 @@
 # Local Compute
 
+
+
+![](/home/xgueret/Workspace/local-compute/img/local_laptop.png)
+
+
+
 This repository contains Ansible playbooks for setting up a local compute environment. The playbooks automate the installation and configuration of various tools and packages on your local machine.
-
-
 
 ## Contents
 

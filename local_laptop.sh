@@ -2,6 +2,7 @@
 
 # Activer le mode strict pour bash
 set -euo pipefail
+# Internal Field Separator (IFS).
 IFS=$'\n\t'
 
 # Déterminer le répertoire du script
