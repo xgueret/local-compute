@@ -6,7 +6,11 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Déterminer le répertoire du script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+
+# se positionner dans le rep de travail
+cd "$SCRIPT_DIR"
+
 # Chemin vers l'environnement virtuel
 VENV_PATH="$SCRIPT_DIR/.venv"
 # Liste des tags valides
