@@ -1,0 +1,4 @@
+---
+dbeaver_version: "25.0.5"
+dbeaver_deb_url: "https://dbeaver.io/files/{{ dbeaver_version }}/dbeaver-ce_{{ dbeaver_version }}_amd64.deb"
+dbeaver_deb_path: "/tmp/dbeaver-ce_{{ dbeaver_version }}.deb"

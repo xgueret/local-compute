@@ -1,3 +1,4 @@
+---
 - name: Ensure Git is installed
   ansible.builtin.apt:
     name: git

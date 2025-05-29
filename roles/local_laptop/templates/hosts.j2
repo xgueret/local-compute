@@ -5,7 +5,7 @@
 # ansible_fqdn ansible_hostname
 
 # Custom host entries
-{% for host in custom_hosts %}
+{% for host in local_laptop_custom_hosts %}
 {{ host.ip }}   {{ host.name }}
 {% endfor %}
 

@@ -1,3 +1,4 @@
+---
 - name: Set fact username on the host
   ansible.builtin.set_fact:
     local_user: "{{ username_on_the_host.stdout }}"
@@ -22,8 +23,10 @@
 - name: Add GPG key for HashiCorp
   ansible.builtin.command: >
     gpg --dearmor -o {{ hashicorp_software_gpg.key_path }} /tmp/hashicorp-archive-keyring.gpg
+  args:
+    creates: "{{ hashicorp_software_gpg.path }}"
   when: hashicorp_software_gpg.key_url is defined and not key_exists.stat.exists
-  
+
 - name: Add repository for hashicorp package
   ansible.builtin.apt_repository:
     repo: "{{ hashicorp_software_gpg.repo }}"

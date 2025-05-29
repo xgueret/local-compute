@@ -1,7 +1,7 @@
 ---
 - name: Install necessary packages
   ansible.builtin.apt:
-    name: 
+    name:
       - apt-transport-https
       - ca-certificates
       - curl
@@ -10,7 +10,7 @@
 
 - name: Remove conflicting Docker packages
   ansible.builtin.apt:
-    name: 
+    name:
       - docker.io
       - docker-doc
       - docker-compose
@@ -35,8 +35,10 @@
 - name: Add GPG key for Docker
   ansible.builtin.command: >
     gpg --dearmor -o {{ docker_gpg.path }} {{ docker_gpg.tmp_path }}
+  args:
+    creates: "{{ docker_gpg.path }}"
   when: docker_gpg.url is defined and not key_exists.stat.exists
-  
+
 - name: Set up the Docker repository
   ansible.builtin.apt_repository:
     repo: "{{ docker_gpg.repo }}"
@@ -46,7 +48,7 @@
 
 - name: Install Docker Engine
   ansible.builtin.apt:
-    name: 
+    name:
       - docker-ce
       - docker-compose-plugin
     state: present

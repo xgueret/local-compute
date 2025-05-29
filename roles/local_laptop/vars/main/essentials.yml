@@ -1,6 +1,5 @@
 ---
-packages:
-# The essentials
+local_laptop_packages:
   - tree
   - vim
   - python3-venv
@@ -17,24 +16,9 @@ packages:
   - xclip
   - jq
   - yq
-# developpement
   - sqlite3
   - shellcheck
-## img
   - gimp
-## js
-  # - nodejs
-  # - npm
-  #
-  #- apt-transport-https
-  #- xdotool
-  #- rsync
-  # tools needed to create debian packages
-  #- dh-make 
-  #- devscripts 
-  #- build-essential
-  # --
-# misc
   - python3-argcomplete
-# k8s
   - kubetail
+  - imagemagick
