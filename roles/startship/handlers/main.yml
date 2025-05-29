@@ -2,7 +2,7 @@
 - name: Set fact username on the host
   ansible.builtin.set_fact:
     local_user: "{{ username_on_the_host.stdout }}"
-    
+
 - name: Apply the changes to .bashrc
   ansible.builtin.shell: source /home/{{ local_user }}/.bashrc
   args:

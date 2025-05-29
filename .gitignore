@@ -8,7 +8,6 @@ env.bak/
 venv.bak/
 .vscode/
 **/files/*.deb
-**/vars/**/ip_hosts.yml
 **/vars/**/my-git-config-global.yml
 **/vars/**/my-personal-config.yml
 pyvenv.cfg

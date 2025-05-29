@@ -1,0 +1,2 @@
+---
+local_laptop_desired_hostname: "{{ desired_hostname_vault }}"

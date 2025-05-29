@@ -38,10 +38,10 @@
     line: 'eval "$(starship init bash)"'
     create: true
     state: present
+    mode: '0644'
   become_user: "{{ local_user }}"
 
-- name: Reload .bashrc to apply changes
-  ansible.builtin.shell: source /home/{{ local_user }}/.bashrc
+- name: Source .bashrc to apply changes
+  ansible.builtin.command: bash -c "source /home/{{ local_user }}/.bashrc"
   become_user: "{{ local_user }}"
-  when: starship_installed.failed
-  notify: Apply the changes to .bashrc
+  when: starship_installed.failed is defined and starship_installed.failed

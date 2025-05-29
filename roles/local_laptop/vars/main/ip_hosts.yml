@@ -1,0 +1,10 @@
+---
+local_laptop_custom_hosts:
+  - ip: 127.0.0.1
+    name: "{{ local_laptop_desired_hostname }}"
+  - ip: 127.0.0.1
+    name: openwebui.local
+  - ip: 127.0.0.1
+    name: portainer.local
+  - ip: 127.0.0.1
+    name: excalidraw.local

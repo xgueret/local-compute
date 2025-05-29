@@ -1,8 +1,9 @@
 ---
 - name: Download Postman archive
   ansible.builtin.get_url:
-    url: "https://dl.pstmn.io/download/latest/linux_64"    
+    url: "https://dl.pstmn.io/download/latest/linux_64"
     dest: "/tmp/postman.tar.gz"
+    mode: "0644"
 
 - name: Extract Postman
   ansible.builtin.unarchive:
@@ -27,3 +28,6 @@
       Icon=/opt/Postman/app/resources/app/assets/icon.png
       Type=Application
       Categories=Development;
+    owner: root
+    group: root
+    mode: "0644"

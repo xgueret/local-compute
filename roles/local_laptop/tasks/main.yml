@@ -11,8 +11,8 @@
 
 - name: Set the system hostname
   ansible.builtin.hostname:
-    name: "{{ desired_hostname }}"
-  when: ansible_facts['hostname'] != desired_hostname
+    name: "{{ local_laptop_desired_hostname }}"
+  when: ansible_facts['hostname'] != local_laptop_desired_hostname
 
 - name: Get the username running the deploy
   become: false
@@ -34,7 +34,7 @@
 
 - name: Install a list of packages
   ansible.builtin.apt:
-    pkg: "{{ packages }}"
+    pkg: "{{ local_laptop_packages }}"
 
 - name: Update file hosts
   ansible.builtin.include_tasks:
@@ -43,14 +43,14 @@
 - name: Install package from deb
   ansible.builtin.include_tasks:
     file: install_from_deb.yml
-  loop: "{{ deb_packages }}"
+  loop: "{{ local_laptop_deb_packages }}"
   loop_control:
     loop_var: deb_package
 
 - name: Install software
   ansible.builtin.include_tasks:
     file: install_software.yml
-  loop: "{{ software_list }}"
+  loop: "{{ local_laptop_software_list }}"
   loop_control:
     loop_var: software
 
@@ -70,18 +70,18 @@
   ansible.builtin.include_role:
     name: docker
 
-# - name: Install Homebrew
-#   ansible.builtin.include_role:
-#     name: homebrew
-
-- name: Install asdf
-  ansible.builtin.include_role:
-    name: asdf
-
 - name: Install kubectl
   ansible.builtin.include_role:
     name: kubectl
-#todo il faudra regrouper l'installation des outils de dev dans ce rôle
+
 - name: Install devtools
   ansible.builtin.include_role:
     name: devtools
+
+- name: Install dbeaver
+  ansible.builtin.include_role:
+    name: dbeaver
+
+- name: Install nvidia-container-toolkit
+  ansible.builtin.include_role:
+    name: nvidia_container_toolkit

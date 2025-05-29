@@ -1,0 +1,27 @@
+---
+- name: Install dependancies
+  ansible.builtin.apt:
+    name:
+      - wget
+      - ca-certificates
+      - default-jre
+      - libgtk-3-0
+    state: present
+    update_cache: true
+
+- name: Download dbeaver
+  ansible.builtin.get_url:
+    url: "{{ dbeaver_deb_url }}"
+    dest: "{{ dbeaver_deb_path }}"
+    mode: '0644'
+  tags: dbeaver
+
+- name: Install dbeaver
+  ansible.builtin.apt:
+    deb: "{{ dbeaver_deb_path }}"
+  tags: dbeaver
+
+- name: Clean deb file
+  ansible.builtin.file:
+    path: "{{ dbeaver_deb_path }}"
+    state: absent
