@@ -6,7 +6,6 @@
 - name: Set fact local_user on the host if not defined
   ansible.builtin.set_fact:
     local_user: "{{ username_on_the_host.stdout }}"
-  when: local_user is not defined
 
 - name: Check if Starship is already installed
   ansible.builtin.command: starship --version

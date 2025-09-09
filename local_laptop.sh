@@ -12,7 +12,7 @@ SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 cd "$SCRIPT_DIR"
 
 # Chemin vers l'environnement virtuel
-VENV_PATH="$SCRIPT_DIR/.venv"
+VENV_PATH="$SCRIPT_DIR/venv"
 # Liste des tags valides
 readonly VALID_TAGS=("update" "install" "configure")
 # Version minimum de Python requise
@@ -126,12 +126,12 @@ fi
 source "$VENV_PATH/bin/activate"
 
 # Mettre à jour pip
-python3 -m pip install --upgrade pip
+pip install --upgrade pip
 
 # Vérifier si Ansible est installé, l'installer si nécessaire
 if ! command -v ansible-playbook &>/dev/null; then
 	echo "Ansible non trouvé, installation en cours..."
-	python3 -m pip install ansible
+	pip install ansible
 fi
 
 # Vérifier l'existence du playbook
