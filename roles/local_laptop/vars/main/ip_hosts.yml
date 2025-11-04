@@ -8,3 +8,7 @@ local_laptop_custom_hosts:
     name: portainer.local
   - ip: 127.0.0.1
     name: excalidraw.local
+  - ip: 127.0.0.1
+    name: nas.local
+  - ip: 127.0.0.1
+    name: proxmox.local
